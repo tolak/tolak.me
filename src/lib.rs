@@ -1,7 +1,18 @@
 use serde_json::json;
+use serde::Serialize;
 use worker::*;
+use handlebars::Handlebars;
 
 mod utils;
+
+#[derive(Serialize)]
+struct Resume {
+    name: &'static str,
+    email: &'static str,
+    ens: &'static str,
+    twitter: &'static str,
+    github: &'static str,
+}
 
 fn log_request(req: &Request) {
     console_log!(
@@ -29,7 +40,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     // functionality and a `RouteContext` which you can use to  and get route parameters and
     // Environment bindings like KV Stores, Durable Objects, Secrets, and Variables.
     router
-        .get("/", |_, _| Response::ok("Hello, welcome to Wenfeng Wang homepage!"))
+        .get("/", |_, _| Response::ok(generate_index_page().to_owned()))
         .post_async("/form/:field", |mut req, ctx| async move {
             if let Some(name) = ctx.param("field") {
                 let form = req.form_data().await?;
@@ -52,4 +63,19 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         })
         .run(req, env)
         .await
+}
+
+#[no_mangle]
+pub fn generate_index_page() -> String {
+    println!("Rending index page...\n");
+
+    let mut reg = Handlebars::new();
+    reg.register_template_file("index", "../templates/index.hbs").unwrap();
+    reg.render("index", &json!(Resume {
+        name: "Wenfeng Wang",
+        email: "kalot.wang@gmail.com",
+        ens: "tolak.eth",
+        twitter: "tolak_eth",
+        github: "https://github.com/tolak"
+    })).unwrap()
 }
