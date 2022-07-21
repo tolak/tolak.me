@@ -40,37 +40,23 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     // functionality and a `RouteContext` which you can use to  and get route parameters and
     // Environment bindings like KV Stores, Durable Objects, Secrets, and Variables.
     router
-        .get("/", |_, _| Response::ok(generate_index_page().to_owned()))
-        .post_async("/form/:field", |mut req, ctx| async move {
-            if let Some(name) = ctx.param("field") {
-                let form = req.form_data().await?;
-                match form.get(name) {
-                    Some(FormEntry::Field(value)) => {
-                        return Response::from_json(&json!({ name: value }))
-                    }
-                    Some(FormEntry::File(_)) => {
-                        return Response::error("`field` param in form shouldn't be a File", 422);
-                    }
-                    None => return Response::error("Bad Request", 400),
-                }
+        .get_async("/", |_req, ctx| async move {
+            println!("Fetch templates file from KV");
+            let kv = ctx.kv("TOLAK_KV")?;
+            match kv.get("templates/index.hbs").text().await? {
+                Some(templates) => Response::ok(generate_index_page(templates.as_str())),
+                None => Response::error("Bad Request", 400)
             }
-
-            Response::error("Bad Request", 400)
-        })
-        .get("/worker-version", |_, ctx| {
-            let version = ctx.var("WORKERS_RS_VERSION")?.to_string();
-            Response::ok(version)
         })
         .run(req, env)
         .await
 }
 
 #[no_mangle]
-pub fn generate_index_page() -> String {
-    println!("Rending index page...\n");
-
+pub fn generate_index_page(templates: &str) -> String {
+    println!("Rending index page");
     let mut reg = Handlebars::new();
-    reg.register_template_file("index", "../templates/index.hbs").unwrap();
+    reg.register_template_string("index", templates).unwrap();
     reg.render("index", &json!(Resume {
         name: "Wenfeng Wang",
         email: "kalot.wang@gmail.com",

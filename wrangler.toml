@@ -18,5 +18,12 @@ main = "./shim.mjs"
 globs = ["**/*.wasm"]
 type = "CompiledWasm"
 
+# [site]
+# bucket = "./public"
+
+# kv_namespaces = [ 
+#   { binding = "TOLAK-KV", preview_id = "b89efd9681de43c8803fa2179328f539", id = "b89efd9681de43c8803fa2179328f539" }
+# ]
+
 # read more about configuring your Worker via wrangler.toml at:
 # https://developers.cloudflare.com/workers/cli-wrangler/configuration
