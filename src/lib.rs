@@ -1,3 +1,4 @@
+/*
 use serde_json::json;
 use serde::Serialize;
 use worker::*;
@@ -64,4 +65,93 @@ pub fn generate_index_page(templates: &str) -> String {
         twitter: "tolak_eth",
         github: "https://github.com/tolak"
     })).unwrap()
+}
+*/
+#![recursion_limit = "512"]
+#[warn(missing_debug_implementations, missing_docs)]
+
+use yew::prelude::*;
+
+enum Action {
+    FollowTwitter,
+    SendEmail,
+}
+
+struct Resume {
+    name: &'static str,
+    email: &'static str,
+    ens: &'static str,
+    twitter: &'static str,
+    github: &'static str,
+    twitter_followers: u32,
+}
+
+impl Component for Resume {
+    type Message = Action;
+    type Properties = ();
+
+    fn create(_ctx: &Context<Self>) -> Self {
+        Self {
+            name: "Wenfeng Wang",
+            email: "kalot.wang@gmail.com",
+            ens: "tolak.eth",
+            twitter: "tolak_eth",
+            github: "https://github.tom/tolak",
+            twitter_followers: 0,
+        }
+    }
+
+    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+        match msg {
+            Action::FollowTwitter => {
+                self.twitter_followers += 1;
+                // the value has changed so we need to
+                // re-render for it to appear on the page
+                true
+            },
+            Action::SendEmail => {
+                false
+            }
+        }
+    }
+
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        // This gives us a component's "`Scope`" which allows us to send messages, etc to the component.
+        let link = ctx.link();
+        html! {
+            <div>
+                <div>
+                    {"Hi 0000000"}<h1>{format!("Hi, this is {}", self.name)}</h1>
+                    <h1>{format!("Contact me with email {}", self.email)}</h1>
+                    <h1>{format!("I have a cool ENS {}", self.ens)}</h1>
+                    <h1>{format!("Go follow my twitter {}", self.twitter)}</h1>
+                    <h1>{format!("Or my github if you are a dev {}", self.github)}</h1>
+
+                </div>
+                <button onclick={link.callback(|_| Action::FollowTwitter)}>{ "Follow" }</button>
+                <p>{ format!("Twitter followers: {:?}", self.twitter_followers) }</p>
+            </div>
+        }
+    }
+}
+
+use log::Level;
+use wasm_bindgen::prelude::*;
+use web_logger::Config;
+
+// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
+// allocator.
+#[cfg(feature = "wee_alloc")]
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+// This is the entry point for the web app
+#[wasm_bindgen]
+pub fn run_app() -> Result<(), JsValue> {
+    #[cfg(feature = "console_error_panic_hook")]
+    console_error_panic_hook::set_once();
+
+    web_logger::custom_init(Config { level: Level::Info });
+    yew::start_app::<Resume>();
+    Ok(())
 }
