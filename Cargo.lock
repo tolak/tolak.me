@@ -664,6 +664,7 @@ dependencies = [
  "serde_json",
  "wasm-bindgen",
  "wasm-bindgen-test",
+ "web-sys",
  "web_logger",
  "wee_alloc",
  "yew",

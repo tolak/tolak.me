@@ -1,82 +1,17 @@
-/*
-use serde_json::json;
-use serde::Serialize;
-use worker::*;
-use handlebars::Handlebars;
-
-mod utils;
-
-#[derive(Serialize)]
-struct Resume {
-    name: &'static str,
-    email: &'static str,
-    ens: &'static str,
-    twitter: &'static str,
-    github: &'static str,
-}
-
-fn log_request(req: &Request) {
-    console_log!(
-        "{} - [{}], located at: {:?}, within: {}",
-        Date::now().to_string(),
-        req.path(),
-        req.cf().coordinates().unwrap_or_default(),
-        req.cf().region().unwrap_or("unknown region".into())
-    );
-}
-
-#[event(fetch)]
-pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
-    log_request(&req);
-
-    // Optionally, get more helpful error messages written to the console in the case of a panic.
-    utils::set_panic_hook();
-
-    // Optionally, use the Router to handle matching endpoints, use ":name" placeholders, or "*name"
-    // catch-alls to match on specific patterns. Alternatively, use `Router::with_data(D)` to
-    // provide arbitrary data that will be accessible in each route via the `ctx.data()` method.
-    let router = Router::new();
-
-    // Add as many routes as your Worker needs! Each route will get a `Request` for handling HTTP
-    // functionality and a `RouteContext` which you can use to  and get route parameters and
-    // Environment bindings like KV Stores, Durable Objects, Secrets, and Variables.
-    router
-        .get_async("/", |_req, ctx| async move {
-            println!("Fetch templates file from KV");
-            let kv = ctx.kv("TOLAK_KV")?;
-            match kv.get("templates/index.hbs").text().await? {
-                Some(templates) => Response::ok(generate_index_page(templates.as_str())),
-                None => Response::error("Bad Request", 400)
-            }
-        })
-        .run(req, env)
-        .await
-}
-
-#[no_mangle]
-pub fn generate_index_page(templates: &str) -> String {
-    println!("Rending index page");
-    let mut reg = Handlebars::new();
-    reg.register_template_string("index", templates).unwrap();
-    reg.render("index", &json!(Resume {
-        name: "Wenfeng Wang",
-        email: "kalot.wang@gmail.com",
-        ens: "tolak.eth",
-        twitter: "tolak_eth",
-        github: "https://github.com/tolak"
-    })).unwrap()
-}
-*/
 #![recursion_limit = "512"]
 #[warn(missing_debug_implementations, missing_docs)]
 
+mod components;
+
 use yew::prelude::*;
+// use components::modal::{Modal, get_modal_by_id};
 
 enum Action {
     FollowTwitter,
     SendEmail,
 }
 
+#[derive(Properties, Clone, PartialEq, Debug)]
 struct Resume {
     name: &'static str,
     email: &'static str,
@@ -119,18 +54,40 @@ impl Component for Resume {
         // This gives us a component's "`Scope`" which allows us to send messages, etc to the component.
         let link = ctx.link();
         html! {
-            <div>
-                <div>
-                    {"Hi 0000000"}<h1>{format!("Hi, this is {}", self.name)}</h1>
-                    <h1>{format!("Contact me with email {}", self.email)}</h1>
-                    <h1>{format!("I have a cool ENS {}", self.ens)}</h1>
-                    <h1>{format!("Go follow my twitter {}", self.twitter)}</h1>
-                    <h1>{format!("Or my github if you are a dev {}", self.github)}</h1>
-
+            <>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                    </div>
+                    <div class="col-sm-6">
+                        // <button onclick={link.callback(|_| Action::FollowTwitter)}>{ "Follow" }</button>
+                        <div class="card border-light">
+                            <div class="card-header border-light">{ "About me" }</div>
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-6">
+                                    <img class="card-img-top rounded-circle z-depth-2" src="/images/morty.jpg" width="180" height="180" data-holder-rendered="true" />
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{ "Wenfeng Wang | tolak.eth" }</h5>
+                                <p class="card-text">{ "Core developer @PhalaNetwork, and https://subbridge.io, writing Rust/Solidity, building Off-Chain&Multi-Chain technologies." }</p>
+                                <div class="btn-group row">
+                                    <div class="col">
+                                        <a href="https://twitter.com/tolak_eth" target="_blank" class="btn btn-dark" width="120px">{ "Twitter" }</a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="https://github.com/tolak" target="_blank" class="btn btn-dark" width="120px">{ "Github" }</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm"></div>
                 </div>
-                <button onclick={link.callback(|_| Action::FollowTwitter)}>{ "Follow" }</button>
-                <p>{ format!("Twitter followers: {:?}", self.twitter_followers) }</p>
             </div>
+            </>
         }
     }
 }
