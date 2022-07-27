@@ -68,14 +68,14 @@ impl Component for Resume {
                         // Header image and social buttons
                         <div class="row mt-5 mb-2">
                             <div class="col mx-auto text-center">
-                                <img class="rounded-circle z-depth-2" src="/images/morty.jpg" width="180" height="180" data-holder-rendered="true" />
+                                <img class="rounded-circle z-depth-2" src="/images/me.png" width="180" height="180" data-holder-rendered="true" />
                                 <h5 class="mt-2">{ "Wenfeng Wang | tolak.eth" }</h5>
                                 <div class="btn-group mt-2 row">
                                     <div class="col">
-                                        <a href="https://twitter.com/tolak_eth" target="_blank" class="btn btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></a>
+                                        <a href="https://twitter.com/tolak_eth" target="_blank" class="btn btn-xs btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></a>
                                     </div>
                                     <div class="col">
-                                        <a href="https://github.com/tolak" target="_blank" class="btn btn-social-icon btn-github"><i class="fa fa-github"></i></a>
+                                        <a href="https://github.com/tolak" target="_blank" class="btn btn-xs btn-social-icon btn-github"><i class="fa fa-github"></i></a>
                                     </div>
                                 </div>
                             </div>

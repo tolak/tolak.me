@@ -7,3 +7,5 @@ node_modules
 .vscode
 dist
 yarn-error.log
+.DS_Store
+public/.DS_Store
