@@ -121,14 +121,10 @@ impl Component for Resume {
                             <i class="fa fa-quote-left fa-2x fa-pull-left" aria-hidden="true"></i>
                             <h2>{ "Contact me" }</h2>
                         </div>
-                        <form>
-                            <div class="form-group">
-                                <input type="email" class="form-control" id="emailaddressinput" placeholder="name@example.com"/>
-                            </div>
-                            <div class="mt-4 form-group">
-                                <textarea class="form-control" id="messageinput" rows="3"></textarea>
-                            </div>
-                            <button type="submit" class="mt-4 btn btn-primary">{ "Send" }</button>
+                        <form action="mailto:kalot.wang@gmail.com" method="post" enctype="text/plain">
+                            <input type="email" name="From" class="form-control" id="emailaddressinput" placeholder="your email: name@example.com"/>
+                            <textarea type="text" name="Message" class="mt-4 form-control" id="messageinput" rows="3"></textarea>
+                            <input type="submit" class="mt-4 btn btn-primary" value="Send"/>
                         </form>
                     </div>
                     <div class="col-sm"></div>
