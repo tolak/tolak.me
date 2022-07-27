@@ -62,7 +62,7 @@ impl Component for Resume {
                     <div class="col-sm-6 bg-light">
                         // About me
                         <div class="mt-5">
-                            <i class="fa fa-quote-left fa-2x fa-pull-left fa-border" aria-hidden="true"></i>
+                            <i class="fa fa-quote-left fa-2x fa-pull-left" aria-hidden="true"></i>
                             <h2>{ "About me" }</h2>
                         </div>
                         // Header image and social buttons
@@ -89,7 +89,7 @@ impl Component for Resume {
 
                         // Contact me
                         <div class="mt-5 mb-4">
-                            <i class="fa fa-quote-left fa-2x fa-pull-left fa-border" aria-hidden="true"></i>
+                            <i class="fa fa-quote-left fa-2x fa-pull-left" aria-hidden="true"></i>
                             <h2>{ "Contact me" }</h2>
                         </div>
                         <form>
