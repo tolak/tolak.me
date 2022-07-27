@@ -65,7 +65,7 @@ impl Component for Resume {
                             <i class="fa fa-quote-left fa-2x fa-pull-left fa-border" aria-hidden="true"></i>
                             <h2>{ "About me" }</h2>
                         </div>
-                        // Header image
+                        // Header image and social buttons
                         <div class="row mt-5 mb-2">
                             <div class="col mx-auto text-center">
                                 <img class="rounded-circle z-depth-2" src="/images/morty.jpg" width="180" height="180" data-holder-rendered="true" />
@@ -80,6 +80,7 @@ impl Component for Resume {
                                 </div>
                             </div>
                         </div>
+                        // Description
                         <span class="mt-4 text-secondary">
                             { "Core developer @PhalaNetwork, and " }
                             <a href="https://subbridge.io" target="_blank"  class="text-primary">{ "https://subbridge.io" }</a>

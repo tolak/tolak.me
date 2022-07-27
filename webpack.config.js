@@ -25,19 +25,28 @@ module.exports = (env, argv) => {
         },
         module: {
             rules: [
+                {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    use: {
+                      loader: 'babel-loader',
+                      options: {
+                        presets: ['@babel/preset-env']
+                      }
+                    }
+                },
                 // Loading styles
                 {
-                    test: /\.css$/,
+                    test: /\.css$/i,
                     use: [
-                        MiniCssExtractPlugin.loader,
+                        'style-loader',
                         'css-loader',
+                        'sass-loader',
                     ],
                 },
                 // Loading images
                 {
                     test: /\.(png|svg|jpg|jpeg|gif)$/i,
-                    include: path.resolve(__dirname, 'public/images'),
-                    exclude: path.resolve(__dirname, 'public/fonts'),
                     use: [{
                       loader: 'file-loader',
                       options: {
@@ -49,8 +58,8 @@ module.exports = (env, argv) => {
                 // Loading fonts
                 {
                     test: /\.(woff(2)?|ttf|eot|svg|otf)(\?v=\d+\.\d+\.\d+)?$/,
-                    include: path.resolve(__dirname, 'public/fonts'),
-                    exclude: path.resolve(__dirname, 'public/images'),
+                    // include: path.resolve(__dirname, 'public/fonts'),
+                    // exclude: path.resolve(__dirname, 'public/images'),
                     use: [{
                       loader: 'file-loader',
                       options: {
